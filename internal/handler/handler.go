@@ -3,9 +3,6 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"golang-ture/internal/services"
-
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 type Handler struct {
@@ -18,8 +15,6 @@ func NewHandler(service *services.Service) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	api := router.Group("/api")
 	{
