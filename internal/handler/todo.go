@@ -3,8 +3,11 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"golang-ture/internal/models"
+	"html/template"
 	"net/http"
 )
+
+const defaultTodoHtmlTemplatePath = "internal/templates/html/todo/"
 
 func (h *Handler) createItem(c *gin.Context) {
 	var input models.TodoItem
@@ -72,4 +75,29 @@ func (h *Handler) deleteItem(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, statusResponse{"ok"})
+}
+
+func (h *Handler) getItemsListPage(c *gin.Context) {
+	funcMap := map[string]interface{}{
+		"Increment": func(i int) int {
+			return i + 1
+		},
+	}
+	fileName := defaultTodoHtmlTemplatePath + "todo_list_page.html"
+	tmpl, err := template.New("todo_list_page.html").Funcs(funcMap).ParseFiles(fileName)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	items, err := h.service.TodoItem.GetAll()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err := tmpl.Execute(c.Writer, items); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 }
