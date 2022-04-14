@@ -22,7 +22,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			items.GET("/", h.getAllItems)
 			items.GET("/:id", h.getItemById)
-			items.GET("/list-page", h.getItemsListPage)
+			items.GET("/todo-list-page", h.getItemsListPage)
 			items.POST("/", h.createItem)
 			items.PUT("/:id", h.updateItem)
 			items.DELETE("/:id", h.deleteItem)
