@@ -4,7 +4,11 @@ build:
 run:
 	docker-compose up golang-ture
 
+generate:
+	go generate ./ent
+
 test:
 	go test -v ./...
 
-
+download:
+	go mod download
