@@ -2,6 +2,15 @@ package models
 
 import "errors"
 
+type TodoItemStatus int
+
+const (
+	Backlog TodoItemStatus = iota
+	InProgress
+	Review
+	Done
+)
+
 type TodoItem struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -13,7 +22,7 @@ type TodoItem struct {
 type UpdateTodoItemInput struct {
 	Title       *string `json:"title"`
 	Description *string `json:"description"`
-	Status      *string `json:"status"`
+	Status      *int    `json:"status" binding:"required,gte=0,lte=3"`
 	Done        *bool   `json:"done"`
 }
 
@@ -37,8 +46,8 @@ func (i *TodoItem) ModifyDescription(newDescription string) {
 	i.Description = newDescription
 }
 
-func (i *TodoItem) ModifyStatus(newStatus string) {
-	i.Status = newStatus
+func (i *TodoItem) ModifyStatus(newStatus int) {
+	i.Status = TodoItemStatus(newStatus).String()
 }
 
 func (i *TodoItem) ModifyDone(newDone bool) {

@@ -15,7 +15,7 @@ func (TodoItem) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").MaxLen(255),
 		field.String("description").MaxLen(500),
-		field.String("status").MaxLen(25),
+		field.Int("status").Default(0),
 		field.Bool("done").Default(false),
 	}
 }

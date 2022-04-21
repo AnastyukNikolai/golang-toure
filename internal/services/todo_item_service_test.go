@@ -29,7 +29,7 @@ func TestCreate(t *testing.T) {
 					Id:          1,
 					Title:       "test title",
 					Description: "test description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 					Done:        false,
 				},
 			},
@@ -42,7 +42,7 @@ func TestCreate(t *testing.T) {
 					Id:          1,
 					Title:       "test title",
 					Description: "test description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 					Done:        false,
 				},
 			},
@@ -88,12 +88,12 @@ func TestGetAll(t *testing.T) {
 					Id:          1,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
 			},
 			want: []models.TodoItem{
-				{Id: 1, Title: "title", Description: "description", Status: "Backlog", Done: true},
+				{Id: 1, Title: "title", Description: "description", Status: models.TodoItemStatus(0).String(), Done: true},
 			},
 		},
 
@@ -149,14 +149,14 @@ func TestGetById(t *testing.T) {
 					Id:          1,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
 			},
 			input: args{
 				itemId: 1,
 			},
-			want: models.TodoItem{Id: 1, Title: "title", Description: "description", Status: "Backlog", Done: true},
+			want: models.TodoItem{Id: 1, Title: "title", Description: "description", Status: models.TodoItemStatus(0).String(), Done: true},
 		},
 	}
 
@@ -196,7 +196,7 @@ func TestDelete(t *testing.T) {
 					Id:          1,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
 			},
@@ -252,7 +252,7 @@ func TestUpdate(t *testing.T) {
 					Id:          1,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 				})
 			},
 			input: args{
@@ -260,11 +260,11 @@ func TestUpdate(t *testing.T) {
 				input: models.UpdateTodoItemInput{
 					Title:       stringPointer("new title"),
 					Description: stringPointer("new description"),
-					Status:      stringPointer("In_Progress"),
+					Status:      intPointer(1),
 					Done:        boolPointer(true),
 				},
 			},
-			want: models.TodoItem{Id: 1, Title: "new title", Description: "new description", Status: "In_Progress", Done: true},
+			want: models.TodoItem{Id: 1, Title: "new title", Description: "new description", Status: models.TodoItemStatus(1).String(), Done: true},
 		},
 		{
 			name: "OK_WithoutStatus",
@@ -273,7 +273,7 @@ func TestUpdate(t *testing.T) {
 					Id:          2,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 				})
 			},
 			input: args{
@@ -284,7 +284,7 @@ func TestUpdate(t *testing.T) {
 					Done:        boolPointer(true),
 				},
 			},
-			want: models.TodoItem{Id: 2, Title: "new title", Description: "new description", Status: "Backlog", Done: true},
+			want: models.TodoItem{Id: 2, Title: "new title", Description: "new description", Status: models.TodoItemStatus(0).String(), Done: true},
 		},
 		{
 			name: "OK_WithoutStatusAndDone",
@@ -293,7 +293,7 @@ func TestUpdate(t *testing.T) {
 					Id:          3,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 				})
 			},
 			input: args{
@@ -303,7 +303,7 @@ func TestUpdate(t *testing.T) {
 					Description: stringPointer("new description"),
 				},
 			},
-			want: models.TodoItem{Id: 3, Title: "new title", Description: "new description", Status: "Backlog", Done: false},
+			want: models.TodoItem{Id: 3, Title: "new title", Description: "new description", Status: models.TodoItemStatus(0).String(), Done: false},
 		},
 		{
 			name: "OK_WithoutDoneAndDescription",
@@ -312,17 +312,17 @@ func TestUpdate(t *testing.T) {
 					Id:          4,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 				})
 			},
 			input: args{
 				itemId: 4,
 				input: models.UpdateTodoItemInput{
 					Title:  stringPointer("new title"),
-					Status: stringPointer("In_Progress"),
+					Status: intPointer(1),
 				},
 			},
-			want: models.TodoItem{Id: 4, Title: "new title", Description: "description", Status: "In_Progress", Done: false},
+			want: models.TodoItem{Id: 4, Title: "new title", Description: "description", Status: models.TodoItemStatus(1).String(), Done: false},
 		},
 		{
 			name: "OK_NoInputFields",
@@ -331,13 +331,13 @@ func TestUpdate(t *testing.T) {
 					Id:          5,
 					Title:       "title",
 					Description: "description",
-					Status:      "Backlog",
+					Status:      models.TodoItemStatus(0).String(),
 				})
 			},
 			input: args{
 				itemId: 5,
 			},
-			want: models.TodoItem{Id: 5, Title: "title", Description: "description", Status: "Backlog", Done: false},
+			want: models.TodoItem{Id: 5, Title: "title", Description: "description", Status: models.TodoItemStatus(0).String(), Done: false},
 		},
 		{
 			name: "Not Found",
@@ -369,5 +369,9 @@ func stringPointer(s string) *string {
 }
 
 func boolPointer(b bool) *bool {
+	return &b
+}
+
+func intPointer(b int) *int {
 	return &b
 }

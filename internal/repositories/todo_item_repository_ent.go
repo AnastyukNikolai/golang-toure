@@ -2,9 +2,11 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"golang-ture/ent"
 	"golang-ture/ent/todoitem"
 	"golang-ture/internal/models"
+	_ "google.golang.org/genproto/googleapis/rpc/status"
 )
 
 type TodoItemRepositoryEnt struct {
@@ -16,11 +18,12 @@ func NewTodoItemRepositoryEnt(DBClient *ent.Client) *TodoItemRepositoryEnt {
 }
 
 func (r *TodoItemRepositoryEnt) Create(item models.TodoItem) (int, error) {
+	fmt.Println(item)
 	todoItemDB, err := r.DBClient.TodoItem.
 		Create().
 		SetTitle(item.Title).
 		SetDescription(item.Description).
-		SetStatus("Backlog").
+		SetStatus(0).
 		SetDone(false).
 		Save(context.Background())
 	if err != nil {
@@ -36,7 +39,8 @@ func (r *TodoItemRepositoryEnt) GetAll() ([]models.TodoItem, error) {
 		return items, err
 	}
 	for _, todoItemDB := range todoItemsDB {
-		var todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, todoItemDB.Status, todoItemDB.Done}
+		itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
+		var todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
 		items = append(items, todo)
 	}
 	return items, nil
@@ -48,7 +52,8 @@ func (r *TodoItemRepositoryEnt) GetById(itemId int) (models.TodoItem, error) {
 	if err != nil {
 		return todo, err
 	}
-	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, todoItemDB.Status, todoItemDB.Done}
+	itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
+	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
 	return todo, nil
 }
 
@@ -81,7 +86,8 @@ func (r *TodoItemRepositoryEnt) Update(itemId int, input models.UpdateTodoItemIn
 		return todo, err
 	}
 
-	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, todoItemDB.Status, todoItemDB.Done}
+	itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
+	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
 
 	return todo, nil
 }
