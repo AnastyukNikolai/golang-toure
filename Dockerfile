@@ -13,8 +13,8 @@ RUN apt-get update && \
 RUN chmod +x wait-for-postgres.sh
 
 # build go app
-#RUN go mod download
-#RUN go generate ./ent
+RUN go mod download
+RUN go generate ./ent
 RUN go build -o golang-ture ./cmd/main.go
 
 CMD ["./golang-ture"]
