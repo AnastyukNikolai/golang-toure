@@ -1,4 +1,4 @@
-FROM golang:1.18-bullseye
+FROM golang:1.16-bullseye
 
 RUN go version
 ENV GOPATH=/
@@ -14,7 +14,6 @@ RUN chmod +x wait-for-postgres.sh
 
 # build go app
 RUN go mod download
-RUN go generate ./ent
 RUN go build -o golang-ture ./cmd/main.go
 
 CMD ["./golang-ture"]
