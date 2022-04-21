@@ -16,9 +16,9 @@ func NewService(repos *repositories.Repository) *Service {
 }
 
 type TodoItem interface {
-	Create(item models.TodoItem) (string, error)
+	Create(item models.TodoItem) (int, error)
 	GetAll() ([]models.TodoItem, error)
-	GetById(itemId string) (models.TodoItem, error)
-	Delete(itemId string) error
-	Update(itemId string, input models.UpdateTodoItemInput) error
+	GetById(itemId int) (models.TodoItem, error)
+	Delete(itemId int) error
+	Update(itemId int, input models.UpdateTodoItemInput) (models.TodoItem, error)
 }

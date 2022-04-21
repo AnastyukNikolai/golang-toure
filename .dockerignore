@@ -1,0 +1,7 @@
+.dockerignore
+.gitignore
+Makefile
+.idea
+.git
+.DS_Store
+docker-compose

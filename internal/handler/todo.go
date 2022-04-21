@@ -1,13 +1,13 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
+	golang_ture "golang-ture"
 	"golang-ture/internal/models"
-	"html/template"
 	"net/http"
 )
-
-const defaultTodoHtmlTemplatePath = "internal/templates/html/todo/"
 
 func (h *Handler) createItem(c *gin.Context) {
 	var input models.TodoItem
@@ -38,7 +38,11 @@ func (h *Handler) getAllItems(c *gin.Context) {
 }
 
 func (h *Handler) getItemById(c *gin.Context) {
-	itemId := c.Param("id")
+	itemId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
+		return
+	}
 
 	item, err := h.service.TodoItem.GetById(itemId)
 	if err != nil {
@@ -50,25 +54,34 @@ func (h *Handler) getItemById(c *gin.Context) {
 }
 
 func (h *Handler) updateItem(c *gin.Context) {
-	id := c.Param("id")
+	itemId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
+		return
+	}
 	var input models.UpdateTodoItemInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.service.TodoItem.Update(id, input); err != nil {
+	item, err := h.service.TodoItem.Update(itemId, input)
+	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, statusResponse{"ok"})
+	c.JSON(http.StatusOK, item)
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
-	itemId := c.Param("id")
+	itemId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
+		return
+	}
 
-	err := h.service.TodoItem.Delete(itemId)
+	err = h.service.TodoItem.Delete(itemId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -78,15 +91,9 @@ func (h *Handler) deleteItem(c *gin.Context) {
 }
 
 func (h *Handler) getItemsListPage(c *gin.Context) {
-	funcMap := map[string]interface{}{
-		"Increment": func(i int) int {
-			return i + 1
-		},
-	}
-	fileName := defaultTodoHtmlTemplatePath + "todo_list_page.html"
-	tmpl, err := template.New("todo_list_page.html").Funcs(funcMap).ParseFiles(fileName)
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+	tmpl, ok := golang_ture.Templates["todo_list_page.html"]
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "todo_list_page template not found")
 		return
 	}
 

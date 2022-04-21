@@ -1,24 +1,31 @@
 package repositories
 
 import (
+	"golang-ture/ent"
 	"golang-ture/internal/models"
 )
 
 type TodoItem interface {
-	Create(item models.TodoItem) (string, error)
+	Create(item models.TodoItem) (int, error)
 	GetAll() ([]models.TodoItem, error)
-	GetById(itemId string) (models.TodoItem, error)
-	Delete(itemId string) error
-	Update(itemId string, input models.UpdateTodoItemInput) error
+	GetById(itemId int) (models.TodoItem, error)
+	Delete(itemId int) error
+	Update(itemId int, input models.UpdateTodoItemInput) (models.TodoItem, error)
 }
 
 type Repository struct {
 	TodoItem
 }
 
-func NewRepository(storage *Storage) *Repository {
+func NewRepositoryStorage(storage *Storage) *Repository {
 	storage.Data = make(map[string]map[string]string)
 	return &Repository{
-		TodoItem: NewTodoItemRepository(storage),
+		TodoItem: NewTodoItemRepositoryStorage(storage),
+	}
+}
+
+func NewRepository(DBClient *ent.Client) *Repository {
+	return &Repository{
+		TodoItem: NewTodoItemRepositoryEnt(DBClient),
 	}
 }

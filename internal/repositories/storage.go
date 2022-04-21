@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	todoItemsKey = "todo_items"
+	TodoItemsKey = "todo_items"
 )
 
 type Storage struct {

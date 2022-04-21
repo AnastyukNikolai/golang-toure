@@ -9,26 +9,32 @@ type TodoItemService struct {
 	repo repositories.TodoItem
 }
 
+// Create new instance of TodoItemService
 func NewTodoItemService(repo repositories.TodoItem) *TodoItemService {
 	return &TodoItemService{repo: repo}
 }
 
-func (s *TodoItemService) Create(item models.TodoItem) (string, error) {
+// Create new TodoItem
+func (s *TodoItemService) Create(item models.TodoItem) (int, error) {
 	return s.repo.Create(item)
 }
 
+// Get all TodoItems from storage
 func (s *TodoItemService) GetAll() ([]models.TodoItem, error) {
 	return s.repo.GetAll()
 }
 
-func (s *TodoItemService) GetById(itemId string) (models.TodoItem, error) {
+// Get TodoItem from storage by Id
+func (s *TodoItemService) GetById(itemId int) (models.TodoItem, error) {
 	return s.repo.GetById(itemId)
 }
 
-func (s *TodoItemService) Delete(itemId string) error {
+// Delete TodoItem from storage by Id
+func (s *TodoItemService) Delete(itemId int) error {
 	return s.repo.Delete(itemId)
 }
 
-func (s *TodoItemService) Update(itemId string, input models.UpdateTodoItemInput) error {
+// Update TodoItem fields by Id
+func (s *TodoItemService) Update(itemId int, input models.UpdateTodoItemInput) (models.TodoItem, error) {
 	return s.repo.Update(itemId, input)
 }
