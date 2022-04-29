@@ -2,24 +2,34 @@ package main
 
 import (
 	"context"
-	"github.com/joho/godotenv"
 	"os"
 
+	"github.com/joho/godotenv"
+
 	"database/sql"
-	"entgo.io/ent/dialect"
-	entsql "entgo.io/ent/dialect/sql"
 	"fmt"
-	_ "github.com/jackc/pgx/v4/stdlib"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
-	"golang-ture"
+	golang_ture "golang-ture"
 	"golang-ture/ent"
 	"golang-ture/internal/handler"
 	"golang-ture/internal/repositories"
 	"golang-ture/internal/services"
+
+	_ "golang-ture/docs"
+
+	"entgo.io/ent/dialect"
+	entsql "entgo.io/ent/dialect/sql"
+	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 //go:generate echo file $GOFILE is a part of $GOPACKAGE
+// @title Todo App API
+// @version 1.0
+// @description API Server for TodoList Application
+
+// @host localhost:8787
+// @BasePath /
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 

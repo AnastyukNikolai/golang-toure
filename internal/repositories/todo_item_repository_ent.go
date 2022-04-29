@@ -2,10 +2,10 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"golang-ture/ent"
 	"golang-ture/ent/todoitem"
 	"golang-ture/internal/models"
+
 	_ "google.golang.org/genproto/googleapis/rpc/status"
 )
 
@@ -18,7 +18,6 @@ func NewTodoItemRepositoryEnt(DBClient *ent.Client) *TodoItemRepositoryEnt {
 }
 
 func (r *TodoItemRepositoryEnt) Create(item models.TodoItem) (int, error) {
-	fmt.Println(item)
 	todoItemDB, err := r.DBClient.TodoItem.
 		Create().
 		SetTitle(item.Title).
@@ -39,8 +38,8 @@ func (r *TodoItemRepositoryEnt) GetAll() ([]models.TodoItem, error) {
 		return items, err
 	}
 	for _, todoItemDB := range todoItemsDB {
-		itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
-		var todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
+		var todo models.TodoItem
+		todo.FormatDBTodoItemToModel(todoItemDB)
 		items = append(items, todo)
 	}
 	return items, nil
@@ -52,8 +51,7 @@ func (r *TodoItemRepositoryEnt) GetById(itemId int) (models.TodoItem, error) {
 	if err != nil {
 		return todo, err
 	}
-	itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
-	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
+	todo.FormatDBTodoItemToModel(todoItemDB)
 	return todo, nil
 }
 
@@ -85,9 +83,7 @@ func (r *TodoItemRepositoryEnt) Update(itemId int, input models.UpdateTodoItemIn
 	if err != nil {
 		return todo, err
 	}
-
-	itemStatus := models.TodoItemStatus(todoItemDB.Status).String()
-	todo = models.TodoItem{todoItemDB.ID, todoItemDB.Title, todoItemDB.Description, itemStatus, todoItemDB.Done}
+	todo.FormatDBTodoItemToModel(todoItemDB)
 
 	return todo, nil
 }

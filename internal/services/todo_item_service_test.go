@@ -1,10 +1,11 @@
 package services
 
 import (
-	"github.com/stretchr/testify/assert"
 	"golang-ture/internal/models"
 	"golang-ture/internal/repositories"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreate(t *testing.T) {
@@ -84,13 +85,16 @@ func TestGetAll(t *testing.T) {
 		{
 			name: "Ok",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          1,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			want: []models.TodoItem{
 				{Id: 1, Title: "title", Description: "description", Status: models.TodoItemStatus(0).String(), Done: true},
@@ -145,13 +149,16 @@ func TestGetById(t *testing.T) {
 		{
 			name: "Ok",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          1,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 1,
@@ -192,13 +199,16 @@ func TestDelete(t *testing.T) {
 		{
 			name: "Ok",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          1,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 					Done:        true,
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 1,
@@ -248,12 +258,15 @@ func TestUpdate(t *testing.T) {
 		{
 			name: "OK_AllFields",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          1,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 1,
@@ -269,12 +282,15 @@ func TestUpdate(t *testing.T) {
 		{
 			name: "OK_WithoutStatus",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          2,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 2,
@@ -289,12 +305,15 @@ func TestUpdate(t *testing.T) {
 		{
 			name: "OK_WithoutStatusAndDone",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          3,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 3,
@@ -308,12 +327,15 @@ func TestUpdate(t *testing.T) {
 		{
 			name: "OK_WithoutDoneAndDescription",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          4,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 4,
@@ -327,12 +349,15 @@ func TestUpdate(t *testing.T) {
 		{
 			name: "OK_NoInputFields",
 			mock: func() {
-				service.Create(models.TodoItem{
+				_, err := service.Create(models.TodoItem{
 					Id:          5,
 					Title:       "title",
 					Description: "description",
 					Status:      models.TodoItemStatus(0).String(),
 				})
+				if err != nil {
+					panic(err)
+				}
 			},
 			input: args{
 				itemId: 5,

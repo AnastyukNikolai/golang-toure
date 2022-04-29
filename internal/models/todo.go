@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"golang-ture/ent"
+)
 
 type TodoItemStatus int
 
@@ -52,4 +55,12 @@ func (i *TodoItem) ModifyStatus(newStatus int) {
 
 func (i *TodoItem) ModifyDone(newDone bool) {
 	i.Done = newDone
+}
+
+func (i *TodoItem) FormatDBTodoItemToModel(DBTodoItem *ent.TodoItem) {
+	i.Id = DBTodoItem.ID
+	i.Title = DBTodoItem.Title
+	i.Description = DBTodoItem.Description
+	i.Status = TodoItemStatus(DBTodoItem.Status).String()
+	i.Done = DBTodoItem.Done
 }
