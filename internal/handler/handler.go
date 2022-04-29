@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"golang-ture/internal/services"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"golang-ture/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
