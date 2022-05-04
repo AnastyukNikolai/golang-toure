@@ -7,6 +7,7 @@ import (
 
 type TodoItemStatus int
 
+//go:generate go run github.com/dmarkham/enumer -type=TodoItemStatus
 const (
 	Backlog TodoItemStatus = iota
 	InProgress
