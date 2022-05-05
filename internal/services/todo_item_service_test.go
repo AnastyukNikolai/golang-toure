@@ -171,7 +171,7 @@ func TestGetById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.mock()
 
-			got, err := service.GetById(tt.input.itemId)
+			got, err := service.TodoItem.GetById(tt.input.itemId)
 			if tt.wantErr {
 				assert.Error(t, err)
 			} else {
