@@ -1,8 +1,8 @@
-func (m *{{.StructName}}) Get{{.PropName}}() {{.PropType}} {
+func (m *{{.StructName}}) Get{{.PropName}}V2() {{.PropType}} {
 	return m.{{.PropName}}
 }
 
-func (m *{{.StructName}}) Set{{.PropName}}(val {{.PropType}}) {
+func (m *{{.StructName}}) Set{{.PropName}}V2(val {{.PropType}}) {
 	m.{{.PropName}} = val
 }
 
