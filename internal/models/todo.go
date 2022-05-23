@@ -15,6 +15,7 @@ const (
 	Done
 )
 
+//go:generate go run $GOPATH/src/golang-ture/cmd/gen/generator_v2.go ./.TodoItem
 type TodoItem struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
